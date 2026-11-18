@@ -7,8 +7,8 @@
   const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   /* ---------- WebGL scenes ---------- */
-  const chip = window.AVChip ? window.AVChip.init($("#chip-canvas")) : null;
-  const shield = window.AVParticles ? window.AVParticles.init($("#shield-canvas")) : null;
+  const chip = window.AVChip ? window.AVChip.init($("#chip-canvas"), { y: innerWidth < 700 ? -1.55 : -1.9 }) : null; // starts low so it peeks under the hero text
+  const shield = window.AVParticles && $("#shield-canvas") ? window.AVParticles.init($("#shield-canvas")) : null;
   // The CTA chip is only built when the visitor gets near the end of the page (saves a WebGL scene at load)
   const C = { rotX: 0.9, rotY: -0.8, scale: 0.5, y: 1.35, reveal: 0, logo: 1, glow: 0.8, introY: 0, introA: 0, intensity: 0.9 };
   let ctaChip = null;
@@ -21,7 +21,7 @@
 
   /* Looping CSS animations (threat cards, vault, FAQ dots, footer) only run while their section is on screen */
   const io = new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle("is-off", !e.isIntersecting)), { rootMargin: "200px 0px" });
-  $$(".threats, .privacy, .faq, .footer, .tour").forEach((el) => io.observe(el));
+  $$(".threats, .privacy, .faq, .footer, .tour, .how").forEach((el) => io.observe(el));
 
   /* ---------- Smooth scroll ---------- */
   let lenis = null;
@@ -81,7 +81,7 @@
     addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     ScrollTrigger.create({ start: 0, end: "max", onUpdate: (s) => gsap.set(".nav__progress i", { scaleX: s.progress }) });
-    ["overview", "security", "privacy", "threats", "faq"].forEach((id) => {
+    ["how", "features", "privacy", "threats", "faq"].forEach((id) => {
       const link = $(`.nav__links a[href="#${id}"]`);
       ScrollTrigger.create({
         trigger: "#" + id, start: "top center", end: "bottom center",
@@ -118,17 +118,16 @@
     gsap.to(mark, { "--mx": e.clientX - r.left + "px", "--my": e.clientY - r.top + "px", duration: 0.5, ease: "power3.out" });
   });
 
-  window.AV.form(document.querySelector(".waitlist"), "/api/waitlist", (d) => d.already ? "You are already on the list. We will email you at launch." : "You are on the list. We will email you at launch.");
+  document.querySelectorAll(".waitlist").forEach((f) => window.AV.form(f, "/api/waitlist", (d) => d.already ? "You are already on the list. We will email you at launch." : "You are on the list. We will email you at launch."));
 
   /* ---------- Reduced motion: final states, no pins ---------- */
   if (reduce) {
     Object.assign(S, { rotX: 1.12, rotY: 0.16, scale: 0.9, y: 0.6, reveal: 1.15, logo: 1, glow: 1, introY: 0, introA: 1 });
-    Object.assign(P, { morph: 1 });
+    
     Object.assign(C, { rotX: 1.38, rotY: 0.1, reveal: 1.15, introA: 1 });
     makeCta();
     [chip, shield, ctaChip].forEach((x) => x && x.renderOnce());
-    gsap.set(".ov-stat, .zoom__after, .vault__badge", { autoAlpha: 1 });
-    gsap.set(".zoom__title", { autoAlpha: 0 });
+    gsap.set(".ov-stat, .vault__badge", { autoAlpha: 1 });
     $$(".tour__cap").slice(1).forEach((c) => (c.style.display = "none"));
     $$(".screen").slice(1).forEach((c) => (c.style.display = "none"));
     navTriggers();
@@ -138,14 +137,14 @@
   chip && chip.setActive(true);
 
   /* ---------- Hero intro ---------- */
-  gsap.set(".hero-eyebrow, .hero-sub, .hero-ctas", { autoAlpha: 0, y: 24 });
+  gsap.set(".hero-eyebrow, .hero-sub, .hero-copy .waitlist, .hero-trust", { autoAlpha: 0, y: 24 });
   document.fonts.ready.then(() => {
-    const title = SplitText.create(".hero-title", { type: "chars", charsClass: "char" });
+    const title = SplitText.create(".hero-title", { type: "words,chars", charsClass: "char" });
     gsap.timeline({ defaults: { ease: "expo.out" } })
       .to(".hero-eyebrow", { autoAlpha: 1, y: 0, duration: 1.2 }, 0.1)
-      .from(title.chars, { autoAlpha: 0, yPercent: 30, filter: "blur(8px)", duration: 1.6, stagger: 0.045, clearProps: "filter" }, 0.2)
+      .from(title.chars, { autoAlpha: 0, yPercent: 30, duration: 1.2, stagger: 0.018 }, 0.2)
       .to(".hero-sub", { autoAlpha: 1, y: 0, duration: 1.2 }, 0.75)
-      .to(".hero-ctas", { autoAlpha: 1, y: 0, duration: 1.2 }, 0.9)
+      .to(".hero-copy .waitlist, .hero-trust", { autoAlpha: 1, y: 0, duration: 1.2, stagger: 0.1 }, 0.9)
       .to(S, { introY: 0, introA: 1, duration: 2.6, ease: "power3.out" }, 0)
       .to(S, { reveal: 0.12, duration: 2.4, ease: "power2.out" }, 0.8);
     buildScroll();
@@ -155,7 +154,7 @@
     /* 1. Overview: chip rises, turns to face you, circuits light up */
     gsap.timeline({
       defaults: { ease: "none" },
-      scrollTrigger: { trigger: ".overview", start: "top top", end: "+=340%", pin: true, scrub: 1.2, onLeave: () => chip && chip.setActive(false), onEnterBack: () => chip && chip.setActive(true) },
+      scrollTrigger: { trigger: ".overview", start: "top top", end: "+=160%", pin: true, scrub: 1, onLeave: () => chip && chip.setActive(false), onEnterBack: () => chip && chip.setActive(true) },
     })
       .to(".hero-copy", { autoAlpha: 0, scale: 0.9, y: -50, duration: 1.6 }, 0)
       .to(S, { rotX: 1.12, rotY: 0.16, scale: 0.98, y: 0.62, duration: 6, ease: "power2.inOut" }, 0)
@@ -168,18 +167,8 @@
       .to(S, { intensity: 0.6, duration: 1.5 }, 8.5)
       .to({}, { duration: 0.6 });
 
-    /* 2. Security: title zooms in over red threat particles, then the particles fly together into the shield */
-    const zoomTl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: ".zoom", start: "top top", end: "+=280%", pin: true, scrub: 1 } });
-    zoomTl
-      .fromTo(".zoom__title", { scale: 3.4, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 3, ease: "power3.out" }, 0)
-      .fromTo(P, { alpha: 0 }, { alpha: 1, duration: 2 }, 0)
-      .to(".zoom__title", { backgroundPosition: "100% 0", duration: 2, ease: "none" }, 2.4)
-      .to(".zoom__title", { autoAlpha: 0, scale: 0.8, duration: 1.2, ease: "power2.in" }, 4.6)
-      .to(P, { morph: 1, duration: 3.4, ease: "power2.inOut" }, 4.8)
-      .fromTo(".zoom__after", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 1.2, ease: "power2.out" }, 7.6)
-      .to({}, { duration: 1 });
-    // Keep the particle scene running from one screen before the pin until one screen after it
-    shield && ScrollTrigger.create({ start: () => zoomTl.scrollTrigger.start - innerHeight, end: () => zoomTl.scrollTrigger.end + innerHeight, onToggle: (s) => shield.setActive(s.isActive) });
+    /* 2. How it works: the three steps rise in one after another */
+    gsap.from(".how__step", { y: 60, autoAlpha: 0, duration: 1, stagger: 0.12, ease: "expo.out", scrollTrigger: { trigger: ".how__steps", start: "top 85%", once: true } });
 
     /* 3. Phone tour */
     const caps = $$(".tour__cap"), screens = $$(".screen"), dots = $$(".tour__progress li"), words = $$(".tour__words span");
@@ -203,7 +192,7 @@
     const tour = gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: {
-        trigger: ".tour", start: "top top", end: "+=420%", pin: true, scrub: 1,
+        trigger: ".tour", start: "top top", end: "+=230%", pin: true, scrub: 0.8,
         onUpdate: (s) => {
           const t = s.progress * total;
           const idx = t < 3 ? 0 : t < 6.6 ? 1 : t < 10 ? 2 : 3;
@@ -269,15 +258,6 @@
       .fromTo(".vault__badge", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "back.out(2)" }, 1.2);
     ScrollTrigger.create({ trigger: ".vault", start: "top bottom", end: "bottom top", onToggle: (st) => (st.isActive ? bounce.play() : bounce.pause()) });
 
-    /* 5. Stats panel: rises in, light sweeps across, numbers count */
-    gsap.from(".stat", { y: 60, autoAlpha: 0, duration: 1.1, stagger: 0.1, ease: "expo.out", scrollTrigger: { trigger: ".stats", start: "top 85%", once: true } });
-    gsap.to(".stats__shine", { xPercent: 200, duration: 1.8, delay: 0.4, ease: "power2.inOut", scrollTrigger: { trigger: ".stats", start: "top 80%", once: true } });
-    $$(".stat__val[data-to]").forEach((el) => {
-      const to = +el.dataset.to, dec = +(el.dataset.dec || 0), pre = el.dataset.pre || "", suf = el.dataset.suf || "";
-      const o = { v: +(el.dataset.from || 0) };
-      gsap.to(o, { v: to, duration: 1.8, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%", once: true }, onUpdate: () => (el.textContent = pre + o.v.toFixed(dec) + suf) });
-    });
-
     // Spy-app eye follows the cursor (wanders on touch screens)
     const pupil = $(".sc-eye__pupil"), eye = $(".sc-eye");
     let eyeOn = false;
@@ -303,7 +283,7 @@
     });
 
     // Big headings: line-by-line mask reveal
-    $$(".specs__title, .threats__head h2, .faq__title, .cta__title").forEach((el) =>
+    $$(".section-title, .threats__head h2, .faq__title, .cta__title").forEach((el) =>
       SplitText.create(el, {
         type: "lines", mask: "lines", autoSplit: true,
         onSplit: (self) => gsap.from(self.lines, { yPercent: 105, duration: 1.2, stagger: 0.12, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 85%", once: true } }),
@@ -313,6 +293,7 @@
     rise(".privacy__points li", ".privacy__points");
     rise(".threats__head p");
     rise(".faq__sub");
+    rise(".how .section-sub, .how .eyebrow", ".how");
     rise(".cta__sub, .waitlist", ".cta__sub");
 
 

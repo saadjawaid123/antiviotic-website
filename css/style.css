@@ -698,3 +698,58 @@ form.is-busy button[type=submit] { opacity: 0.7; pointer-events: none; }
 .is-off, .is-off * { animation-play-state: paused !important; }
 /* Own drawing layers for pieces that JavaScript moves every frame, so they slide instead of repainting what is around them */
 .vault__ring, .vchip__in, .vault__flash, .tracker, .zoom__title, .hero-copy, .phone-tilt, .tcard, .tour__words, .tour__cap, .ov-cap, .ov-stat { will-change: transform, opacity; }
+
+/* ===== v8: clarity rebuild. Benefit-first hero, How it works, softly tinted sections, bigger text ===== */
+/* Hero: what it does + email box on the first screen */
+.hero-copy { top: 13vh; max-width: 980px; margin: 0 auto; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: 999px; font: 500 15px var(--body); color: #d2d2d7; background: rgba(255, 255, 255, 0.05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); }
+.hero-dot { width: 8px; height: 8px; border-radius: 50%; background: #4cf2b0; box-shadow: 0 0 10px #4cf2b0; }
+.hero-title { font: 700 clamp(46px, 7.2vw, 104px)/1.02 var(--head); letter-spacing: -0.045em; margin: 24px auto 20px; max-width: 14ch; text-wrap: balance; }
+.hero-sub { font: 400 clamp(18px, 1.7vw, 22px)/1.5 var(--body); color: #b4b4ba; letter-spacing: -0.01em; max-width: 34em; margin: 0 auto; }
+.waitlist--hero { margin: 32px auto 0; max-width: 540px; }
+.waitlist--hero .waitlist__msg { position: absolute; left: 0; right: 0; top: calc(100% + 12px); }
+.hero-trust { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 22px; margin-top: 22px; font-size: 15px; color: #a1a1a6; }
+.hero-trust li { display: inline-flex; align-items: center; gap: 8px; }
+.hero-trust li::before { content: ""; width: 16px; height: 16px; flex: none; background: no-repeat center/16px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234cf2b0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E"); }
+
+/* Shared section heading pattern so every part reads the same way */
+.section-title { font: 700 clamp(38px, 5vw, 68px)/1.05 var(--head); letter-spacing: -0.04em; max-width: 16ch; margin: 0 auto; text-wrap: balance; }
+.section-sub { font: 400 clamp(18px, 1.6vw, 21px)/1.55 var(--body); color: #a1a1a6; max-width: 36em; margin: 20px auto 0; }
+
+/* How it works */
+.how { position: relative; padding: 140px 24px 120px; text-align: center; background: radial-gradient(60% 45% at 50% 0%, rgba(58, 184, 255, 0.12), transparent 70%); }
+.how__steps { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1080px; margin: 64px auto 0; counter-reset: s; }
+.how__step { position: relative; isolation: isolate; text-align: left; padding: 34px 30px 36px; border-radius: 28px; background: linear-gradient(180deg, #121317, #0b0c0f); }
+.how__step .rb::before { animation-duration: 6s; }
+.how__step:nth-child(2) .rb::before { animation-delay: -2s; }
+.how__step:nth-child(3) .rb::before { animation-delay: -4s; }
+.how__num { position: absolute; top: 26px; right: 28px; font: 700 15px var(--head); color: #6e6e73; }
+.how__step svg { width: 44px; height: 44px; padding: 10px; border-radius: 14px; fill: none; stroke: #4cf2b0; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; background: rgba(76, 242, 176, 0.1); }
+.how__step h3 { font: 600 24px/1.2 var(--head); letter-spacing: -0.02em; margin: 26px 0 10px; }
+.how__step p { font-size: 17px; line-height: 1.55; color: #a1a1a6; }
+@media (max-width: 860px) { .how__steps { grid-template-columns: 1fr; max-width: 520px; } .how { padding: 100px 20px 90px; } }
+
+/* Each section gets its own soft colour, so you always know where you are */
+.privacy { background: radial-gradient(55% 60% at 75% 50%, rgba(76, 242, 176, 0.08), transparent 70%); }
+.threats { background: radial-gradient(60% 50% at 50% 0%, rgba(255, 69, 58, 0.09), transparent 70%); }
+.faq { background: radial-gradient(55% 45% at 50% 0%, rgba(139, 123, 255, 0.1), transparent 70%); }
+
+/* Bigger, easier text */
+.nav__links { font-size: 14px; }
+.nav__links a { padding: 7px 14px; }
+.tour__cap p, .privacy__sub, .threats__head p, .faq__sub, .cta__sub { font-size: clamp(18px, 1.6vw, 21px); line-height: 1.55; }
+.privacy__points span, .tcard__body p { font-size: 16px; }
+.footer h4 { font-size: 14px; }
+.footer__cols a { font-size: 15px; }
+.status, .totop, .cta__fine, .footer__bottom { font-size: 14px; }
+.ba, .bq { font-size: 17px; }
+
+@media (max-width: 640px) {
+  .hero-copy { top: 11vh; }
+  .hero-eyebrow { font-size: 13px; padding: 7px 13px; }
+  .hero-title { margin: 18px auto 14px; }
+  .waitlist--hero { margin-top: 24px; }
+  .hero-trust { font-size: 14px; gap: 6px 16px; margin-top: 18px; }
+}
+.waitlist--hero:has(.waitlist__msg:not(:empty)) + .hero-trust { visibility: hidden; }
+@media (max-width: 420px) { .waitlist--hero .pill { padding: 0 5px 0 16px; gap: 8px; font-size: 15px; } .waitlist--hero .pill__icon { width: 34px; height: 34px; } }
