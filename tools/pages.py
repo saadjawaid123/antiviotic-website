@@ -8,13 +8,14 @@ index = (root / "index.html").read_text()
 def between(a, b):
     i = index.index(a); return index[i:index.index(b, i)]
 
-head_bits = between('  <link rel="preload"', '  <link rel="stylesheet" href="css/style.css" />')
+head_bits = between('  <link rel="preload"', '  <link rel="stylesheet" href="css/style.css')
 chrome = between('  <a class="skip"', '  <main id="main">')
 footer = between('  <footer class="footer">', '  <script src="vendor/gsap.min.js"></script>')
 fix = lambda h: re.sub(r'href="#', 'href="/#', h).replace('href="/#main"', 'href="#main"')
 chrome, footer = fix(chrome), fix(footer)
 
 UPDATED = "18 November 2026"
+V = "20261118c"  # bump on every release so browsers load fresh CSS/JS (also in index.html links)
 PAGES = {}
 
 PAGES["privacy"] = ("Privacy Policy", "How Antiviotic handles the little data this website collects, and how the app is designed to keep your phone's data on your phone.", f"""
@@ -136,8 +137,8 @@ for slug, (title, desc, body) in PAGES.items():
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="twitter:card" content="summary_large_image" />
-{head_bits.replace('  <link rel="stylesheet" href="vendor/lenis.css" />\n', '')}  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/css/page.css" />
+{head_bits.replace('  <link rel="stylesheet" href="vendor/lenis.css" />\n', '')}  <link rel="stylesheet" href="/css/style.css?v={V}" />
+  <link rel="stylesheet" href="/css/page.css?v={V}" />
 </head>
 <body data-page="inner">
 {chrome.replace('class="nav"', 'class="nav is-inner"', 1)}  <main id="main" class="doc">
@@ -150,7 +151,7 @@ for slug, (title, desc, body) in PAGES.items():
     </article>
   </main>
 
-{footer}  <script src="/js/common.js"></script>
+{footer}  <script src="/js/common.js?v={V}"></script>
 {'  <script>AV.form(document.querySelector(".cform"), "/api/contact", () => "Thanks. Your message is in, and we will reply by email.");</script>' + chr(10) if slug == "contact" else ""}</body>
 </html>
 """

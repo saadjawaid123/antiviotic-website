@@ -22,5 +22,6 @@ Every push to `master` is built and deployed by Cloudflare automatically.
 npm install
 npm run build          # rebuilds js/chip.js from src/
 python3 tools/pages.py # rebuilds the inner pages after changing their text or the header/footer in index.html
+# On every release, bump the ?v= stamp in index.html and V in tools/pages.py so browsers load fresh CSS/JS
 npx wrangler dev       # local preview with the form API working
 ```

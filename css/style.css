@@ -661,6 +661,28 @@ a:hover .rc, button:hover .rc { transform: translateY(-1.3em); }
   .nav__inner, .nav.is-scrolled .nav__inner { background: rgba(22, 22, 23, 0.96); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 
+/* ===== Rainbow border (Google AI Studio style): a turning rainbow ring.
+   A <span class="rb"> inside the element; a mask leaves only a 1.5px ring visible, and a big conic gradient spins
+   behind it with transform only, so the graphics chip just rotates a ready layer (no repaint per frame). ===== */
+.rb { position: absolute; inset: 0; z-index: -1; border-radius: inherit; padding: 1.5px; overflow: hidden; pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.rb::before { content: ""; position: absolute; left: 50%; top: 50%; width: 150%; aspect-ratio: 1; transform: translate(-50%, -50%) rotate(0deg); will-change: transform;
+  background: conic-gradient(#4cf2b0, #3ab8ff, #8b7bff, #ff6ad5, #ffb340, #4cf2b0); animation: rbspin 4s linear infinite; }
+@keyframes rbspin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+.stats .rb::before { animation-duration: 7s; }
+.stats, .waitlist, .ghost, .nav-join { isolation: isolate; }
+.stats { border-color: transparent; }
+.ghost { box-shadow: none; }
+.ghost:hover { box-shadow: 0 0 34px -8px rgba(139, 123, 255, 0.55); }
+.waitlist { box-shadow: none; }
+.waitlist:focus-within { box-shadow: 0 0 0 6px rgba(139, 123, 255, 0.14); }
+/* Header button: dark with the rainbow ring, white arrow chip */
+.nav-join.pill { background: #0c0d10; color: #f5f5f7; box-shadow: none; }
+.nav-join.pill::before { display: none; }
+.nav-join .pill__icon { background: #f5f5f7; color: #05070a; }
+.nav-join:hover { box-shadow: 0 0 24px -6px rgba(139, 123, 255, 0.6); }
+@media (prefers-reduced-motion: reduce) { .rb::before { animation: none; } }
+
 /* No sideways scrolling on phones: big animated words are clipped by their own sections (iOS Safari ignores clip on html alone) */
 main, .footer, .overview, .zoom, .tour, .privacy, .specs, .threats, .faq, .cta { overflow-x: clip; }
 html, body { overflow-x: clip; max-width: 100%; }
