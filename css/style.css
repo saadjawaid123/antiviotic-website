@@ -602,64 +602,68 @@ a:hover .rc, button:hover .rc { transform: translateY(-1.3em); }
   .hero-ctas .pill, .hero-ctas .ghost { min-height: 50px; font-size: 15px; }
 }
 
-/* ===== v6: liquid glass header ===== */
-/* Layers: refracted + frosted backdrop, tint, specular rim, top highlight, grain. Edge refraction runs in Chromium (SVG filter);
-   Safari and Firefox drop that one declaration and keep the plain blur. */
+/* ===== v7: header. Slim frosted pill, hairline edge, one soft top highlight. Quiet, like Apple / Linear. ===== */
+.nav { padding: 0 16px; }
 .nav__inner {
-  --glass-tint: rgba(28, 30, 34, 0.18);
-  margin-top: 12px; max-width: 1180px; height: 60px; border-radius: 22px; border: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015) 60%, rgba(255, 255, 255, 0.04)), var(--glass-tint);
-  -webkit-backdrop-filter: blur(10px) saturate(170%) brightness(1.08);
-  backdrop-filter: blur(10px) saturate(170%) brightness(1.08);
-  box-shadow:
-    inset 0 1px 0.5px rgba(255, 255, 255, 0.28),
-    inset 0 -1px 0.5px rgba(255, 255, 255, 0.06),
-    inset 0 0 22px rgba(255, 255, 255, 0.035),
-    inset 0 -10px 24px -16px rgba(58, 184, 255, 0.22),
-    0 18px 50px -22px rgba(0, 0, 0, 0.85);
-  transition: max-width 0.8s var(--ease), height 0.5s var(--ease), margin-top 0.5s var(--ease), border-radius 0.8s var(--ease), box-shadow 0.5s, background 0.5s;
+  max-width: 1040px; height: 52px; margin-top: 14px; padding: 0 6px 0 18px; gap: 20px; border: 0; border-radius: 999px;
+  background: rgba(16, 17, 19, 0.38);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  backdrop-filter: blur(18px) saturate(180%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 10px 30px -12px rgba(0, 0, 0, 0.6);
+  transition: max-width 0.8s var(--ease), background 0.5s, box-shadow 0.5s;
 }
 .nav.is-scrolled .nav__inner {
-  --glass-tint: rgba(20, 22, 26, 0.34);
-  max-width: 880px; height: 56px; margin-top: 12px; border-radius: 999px; border-color: transparent;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02) 55%, rgba(255, 255, 255, 0.05)), var(--glass-tint);
-  -webkit-backdrop-filter: blur(14px) saturate(190%) brightness(1.12);
-  backdrop-filter: blur(14px) saturate(190%) brightness(1.12);
-  box-shadow:
-    inset 0 1px 0.5px rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0.5px rgba(255, 255, 255, 0.1),
-    inset 0 0 24px rgba(255, 255, 255, 0.05),
-    inset 0 -12px 26px -16px rgba(76, 242, 176, 0.28),
-    0 24px 60px -20px rgba(0, 0, 0, 0.9),
-    0 0 0 0.5px rgba(0, 0, 0, 0.6);
+  max-width: 760px; height: 52px; margin-top: 14px; border-radius: 999px;
+  background: rgba(16, 17, 19, 0.58);
+  -webkit-backdrop-filter: blur(22px) saturate(190%);
+  backdrop-filter: blur(22px) saturate(190%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09), 0 16px 40px -14px rgba(0, 0, 0, 0.8);
 }
-/* Specular rim: bright where light hits (top-left), fading round the edge, a softer catch bottom-right */
-.nav__inner.has-refract { backdrop-filter: url(#nav-glass) blur(6px) saturate(170%) brightness(1.08); }
-.nav.is-scrolled .nav__inner.has-refract { backdrop-filter: url(#nav-glass) blur(8px) saturate(190%) brightness(1.12); }
-.nav__glass { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 0; }
-.nav__glass::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.12) 22%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.1) 78%, rgba(255, 255, 255, 0.32) 100%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
-/* Top highlight band + faint grain so it reads as frosted glass, not a flat tint */
-.nav__glass::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background:
-  radial-gradient(120% 70% at 50% -30%, rgba(255, 255, 255, 0.14), transparent 60%),
-  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay; }
+/* Chromium: a faint lens bend at the very edge, kept small so it reads as glass, not as an effect */
+.nav__inner.has-refract { backdrop-filter: url(#nav-glass) blur(18px) saturate(180%); }
+.nav.is-scrolled .nav__inner.has-refract { backdrop-filter: url(#nav-glass) blur(22px) saturate(190%); }
+.nav__glass { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 0; overflow: hidden; }
+.nav__glass::before { content: ""; position: absolute; top: 0; left: 14%; right: 14%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.38), transparent); }
+.nav__glass::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 55%); }
+.nav__inner::after { display: none; }
+.nav__inner::before { z-index: 0; background: radial-gradient(180px circle at var(--nx, 50%) 50%, rgba(255, 255, 255, 0.06), transparent 70%); }
 .nav__inner > :not(.nav__glass):not(.nav__progress) { position: relative; z-index: 1; }
-/* Travelling light on the rim stays, but softer so the glass edge leads */
-.nav.is-scrolled .nav__inner::after { opacity: 0.55; }
-.nav__inner::before { z-index: 0; background: radial-gradient(220px circle at var(--nx, 50%) 50%, rgba(255, 255, 255, 0.09), rgba(76, 242, 176, 0.06) 40%, transparent 70%); }
-.nav__pill { background: rgba(255, 255, 255, 0.12); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 4px 14px -6px rgba(0, 0, 0, 0.6); }
-.nav__links a { opacity: 0.8; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45); }
-.nav__burger { background: rgba(255, 255, 255, 0.1); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 0 0 1px rgba(255, 255, 255, 0.08); }
+.nav__brand { font-size: 17px; gap: 8px; }
+.nav__brand svg { width: 20px; height: 20px; }
+.nav__links { gap: 0; font-size: 13px; }
+.nav__links a { padding: 7px 13px; opacity: 1; color: rgba(245, 245, 247, 0.66); text-shadow: none; transition: color 0.25s; }
+.nav__links a:hover, .nav__links a.is-active { color: #f5f5f7; opacity: 1; }
+.nav__links a.is-active::after { display: none; }
+.nav__pill { background: rgba(255, 255, 255, 0.08); box-shadow: none; }
+.nav-join.pill--sm { min-height: 38px; gap: 8px; padding: 0 4px 0 15px; font-size: 13px; box-shadow: none; }
+.nav-join.pill--sm .pill__icon { width: 30px; height: 30px; }
+.nav__progress { left: 24px; right: 24px; height: 1px; opacity: 0; }
+.nav.is-scrolled .nav__progress { display: none; }
+.nav__burger { width: 38px; height: 38px; flex: none; background: rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08); }
+.nav__burger i { left: 11px; right: 11px; }
+.nav__burger i:first-child { top: 15px; }
+.nav__burger i:last-child { top: 22px; }
 @media (max-width: 1000px) {
   .nav { padding: 0 10px; }
-  .nav__inner, .nav.is-scrolled .nav__inner { max-width: 100%; height: 56px; margin-top: 10px; border-radius: 999px; padding: 0 8px 0 18px; gap: 12px; }
+  .nav__inner, .nav.is-scrolled .nav__inner { max-width: 100%; height: 52px; margin-top: 10px; padding: 0 6px 0 16px; gap: 8px; }
   .nav__inner > nav { display: none; }
+  .nav__right { gap: 6px; flex: none; }
+  .nav__brand { min-width: 0; }
 }
-/* Mobile menu: same glass language */
-.menu { background: rgba(8, 9, 11, 0.72); -webkit-backdrop-filter: blur(28px) saturate(170%); backdrop-filter: blur(28px) saturate(170%); }
+/* Small phones: the join button drops its arrow so the menu button always fits */
+@media (max-width: 420px) {
+  .nav-join.pill--sm { min-height: 36px; padding: 0 14px; }
+  .nav-join.pill--sm .pill__icon { display: none; }
+}
+@media (max-width: 330px) { .nav-join { display: none !important; } }
+.menu { background: rgba(8, 9, 11, 0.8); -webkit-backdrop-filter: blur(28px) saturate(170%); backdrop-filter: blur(28px) saturate(170%); }
 @media (prefers-reduced-transparency: reduce) {
   .nav__inner, .nav.is-scrolled .nav__inner { background: rgba(22, 22, 23, 0.96); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
+
+/* No sideways scrolling on phones: big animated words are clipped by their own sections (iOS Safari ignores clip on html alone) */
+main, .footer, .overview, .zoom, .tour, .privacy, .specs, .threats, .faq, .cta { overflow-x: clip; }
+html, body { overflow-x: clip; max-width: 100%; }
 
 /* Forms: honeypot, busy state, small print under the waitlist */
 .hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; }
