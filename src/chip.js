@@ -148,9 +148,9 @@ function radialTexture() {
 }
 
 function init(canvas, initial = {}, target = null) {
-  let renderer, light = false;
+  let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: 'high-performance' });
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
   } catch (e) {
     return null;
   }
@@ -316,7 +316,7 @@ function init(canvas, initial = {}, target = null) {
     const face = THREE.MathUtils.smoothstep(state.rotX, 0.8, 1.2);
     scene.environmentIntensity = 0.42 - 0.3 * face;
     key.intensity = 0.9 - 0.6 * face;
-    renderer.toneMappingExposure = light ? 0.55 + 0.75 * state.introA : 0.35 + 0.65 * state.introA;
+    renderer.toneMappingExposure = 0.35 + 0.65 * state.introA;
     composer.render();
   }
 
@@ -327,16 +327,7 @@ function init(canvas, initial = {}, target = null) {
   new ResizeObserver(resize).observe(canvas);
   resize();
 
-  // Light theme: transparent background (the page shows through), no glow effects, a brighter metal
-  const setTheme = (isLight) => {
-    light = !!isLight;
-    renderer.setClearColor(light ? 0xffffff : 0x000000, light ? 0 : 1);
-    bloom.enabled = !light;
-    traces.visible = logoGlow.visible = pool.visible = !light;
-    if (!active) draw(performance.now());
-  };
-
-  return { state, setActive, setTheme, renderOnce: () => draw(performance.now()) };
+  return { state, setActive, renderOnce: () => draw(performance.now()) };
 }
 
 window.AVChip = { init };
