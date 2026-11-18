@@ -9,7 +9,7 @@
   /* ---------- WebGL scenes ---------- */
   // The chip starts low enough to peek out under the hero text, however tall the window is
   const heroRoom = () => { const c = $(".hero-copy"); return c ? (c.offsetTop + c.offsetHeight) / innerHeight : 0.7; };
-  const chipStartY = () => Math.max(-3.2, (innerWidth < 700 ? -1.55 : -1.9) - Math.max(0, heroRoom() - (innerWidth < 700 ? 0.62 : 0.69)) * 3.2);
+  const chipStartY = () => Math.max(-3.2, (innerWidth < 700 ? -1.55 : -1.9) - Math.max(0, heroRoom() - (innerWidth < 700 ? 0.6 : 0.62)) * 3.2);
   const chip = window.AVChip ? window.AVChip.init($("#chip-canvas"), { y: chipStartY() }) : null;
   const shield = window.AVParticles && $("#shield-canvas") ? window.AVParticles.init($("#shield-canvas")) : null;
   // The CTA chip is only built when the visitor gets near the end of the page (saves a WebGL scene at load)
@@ -80,7 +80,13 @@
 
   // Created after the pinned sections so their positions include pin spacing
   function navTriggers() {
-    const onScroll = () => nav.classList.toggle("is-scrolled", scrollY > 24); // a plain listener stays "on" even at the very bottom
+    // Frosted once you scroll; slides away while scrolling down, comes back on any scroll up
+    let lastY = scrollY;
+    const onScroll = () => {
+      const y = scrollY;
+      nav.classList.toggle("is-scrolled", y > 24);
+      if (Math.abs(y - lastY) > 6) { nav.classList.toggle("is-hidden", y > lastY && y > 300 && burger.getAttribute("aria-expanded") !== "true"); lastY = y; }
+    };
     addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     ScrollTrigger.create({ start: 0, end: "max", onUpdate: (s) => gsap.set(".nav__progress i", { scaleX: s.progress }) });
@@ -140,16 +146,16 @@
   chip && chip.setActive(true);
 
   /* ---------- Hero intro ---------- */
-  gsap.set(".hero-eyebrow, .hero-sub, .hero-copy .waitlist, .hero-trust", { autoAlpha: 0, y: 24 });
+  gsap.set(".hero-name, .hero-sub, .hero-ctas", { autoAlpha: 0, y: 24 });
   document.fonts.ready.then(() => {
     const title = SplitText.create(".hero-title", { type: "words,chars", charsClass: "char" });
     gsap.timeline({ defaults: { ease: "expo.out" } })
-      .to(".hero-eyebrow", { autoAlpha: 1, y: 0, duration: 1.2 }, 0.1)
+      .to(".hero-name", { autoAlpha: 1, y: 0, duration: 1.2 }, 0.1)
       .from(title.chars, { autoAlpha: 0, yPercent: 30, duration: 1.2, stagger: 0.018 }, 0.2)
       .to(".hero-sub", { autoAlpha: 1, y: 0, duration: 1.2 }, 0.75)
-      .to(".hero-copy .waitlist, .hero-trust", { autoAlpha: 1, y: 0, duration: 1.2, stagger: 0.1 }, 0.9)
+      .to(".hero-ctas", { autoAlpha: 1, y: 0, duration: 1.2 }, 0.9)
       .to(S, { introY: 0, introA: 1, duration: 2.6, ease: "power3.out" }, 0)
-      .to(S, { reveal: 0.12, duration: 2.4, ease: "power2.out" }, 0.8);
+      .to(S, { reveal: 0.6, logo: 1, glow: 0.9, scale: 0.66, duration: 3, ease: "power2.out" }, 0.6); // the chip lights up on arrival, no scrolling needed
     buildScroll();
   });
 

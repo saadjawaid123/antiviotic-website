@@ -768,3 +768,42 @@ form.is-busy button[type=submit] { opacity: 0.7; pointer-events: none; }
   .waitlist--hero { margin-top: 18px; }
   .hero-trust { margin-top: 12px; }
 }
+
+/* ===== v9: Apple-style hero. Huge line, the lit chip is the product shot ===== */
+.hero-copy { top: 12vh; }
+.hero-name { font: 600 clamp(19px, 1.8vw, 24px) var(--head); letter-spacing: -0.01em; }
+.hero-title { font: 700 clamp(60px, 11.5vw, 176px)/0.95 var(--head); letter-spacing: -0.055em; margin: 12px auto 22px; max-width: none; }
+.hero-sub { font: 500 clamp(19px, 2vw, 27px)/1.35 var(--head); letter-spacing: -0.015em; color: #a1a1a6; max-width: 30ch; }
+.hero-ctas { margin-top: 32px; gap: 28px; }
+.hero-link { font: 500 18px var(--body); color: #2997ff; }
+.hero-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+@media (max-height: 780px) and (min-width: 700px) { .hero-title { font-size: clamp(56px, 15vh, 140px); } .hero-sub { font-size: 20px; } .hero-ctas { margin-top: 24px; } }
+@media (max-width: 640px) { .hero-ctas { flex-direction: column; gap: 16px; margin-top: 26px; } }
+@media (min-width: 700px) { .hero-copy { max-width: 1280px; } .hero-title { font-size: clamp(60px, 9.6vw, 156px); white-space: nowrap; } }
+
+/* ===== v10 header: full-width bar (Apple style). Clear at the top, frosted once you scroll, hides on scroll down ===== */
+.nav { padding: 0; transition: transform 0.45s var(--ease); }
+.nav.is-hidden { transform: translateY(-100%); }
+.nav__inner, .nav.is-scrolled .nav__inner {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px;
+  max-width: none; height: 64px; margin: 0; border-radius: 0;
+  padding: 0 max(24px, calc((100vw - 1200px) / 2));
+  background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none;
+  transition: background 0.4s, box-shadow 0.4s, height 0.4s var(--ease);
+}
+.nav.is-scrolled .nav__inner, .nav.is-scrolled .nav__inner.has-refract {
+  height: 56px; background: rgba(10, 10, 12, 0.72);
+  -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+.nav__inner.has-refract { backdrop-filter: none; }
+.nav__glass, .nav__inner::before { display: none; }
+.nav__brand { justify-self: start; font-size: 18px; }
+.nav__inner > nav { justify-self: center; }
+.nav__right { justify-self: end; }
+.nav__links { gap: 4px; font-size: 14px; }
+.nav__links a { padding: 8px 14px; }
+@media (max-width: 1000px) {
+  .nav__inner, .nav.is-scrolled .nav__inner { grid-template-columns: 1fr auto; height: 60px; margin: 0; border-radius: 0; padding: 0 16px; }
+  .nav.is-scrolled .nav__inner { height: 56px; }
+}

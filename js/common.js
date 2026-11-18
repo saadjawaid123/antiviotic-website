@@ -64,7 +64,12 @@
   /* Inner pages (no GSAP): header state, active link, mobile menu, rolling letters */
   const innerPage = () => {
     const nav = $(".nav"), burger = $(".nav__burger"), menu = $("#menu");
-    const onScroll = () => nav.classList.toggle("is-scrolled", scrollY > 24);
+    let lastY = scrollY;
+    const onScroll = () => {
+      const y = scrollY;
+      nav.classList.toggle("is-scrolled", y > 24);
+      if (Math.abs(y - lastY) > 6) { nav.classList.toggle("is-hidden", y > lastY && y > 300); lastY = y; }
+    };
     addEventListener("scroll", onScroll, { passive: true }); onScroll();
     const setMenu = (open) => {
       burger.setAttribute("aria-expanded", String(open)); burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
@@ -82,6 +87,6 @@
   };
 
   window.AV = { form };
-  const start = () => { glass(); if (document.body.dataset.page === "inner") innerPage(); };
+  const start = () => { if (document.body.dataset.page === "inner") innerPage(); };
   document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", start) : start();
 })();
