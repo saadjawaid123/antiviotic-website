@@ -81,7 +81,27 @@
     const t = $(".totop"); t && t.addEventListener("click", () => scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }));
   };
 
-  window.AV = { form };
-  const start = () => { glass(); if (document.body.dataset.page === "inner") innerPage(); };
+  /* Light / dark switch: remembers the choice; without one, follows the device setting */
+  const root = document.documentElement;
+  const isLight = () => root.dataset.theme === "light";
+  const setTheme = (t, save) => {
+    root.classList.add("theme-anim");
+    root.dataset.theme = t;
+    const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = t === "light" ? "#f5f5f7" : "#000000";
+    if (save) try { localStorage.setItem("av-theme", t); } catch (e) {}
+    window.dispatchEvent(new CustomEvent("av-theme", { detail: t }));
+    setTimeout(() => root.classList.remove("theme-anim"), 600);
+  };
+  const themeSwitch = () => {
+    const b = $(".theme-btn"); if (!b) return;
+    b.addEventListener("click", () => setTheme(isLight() ? "dark" : "light", true));
+    matchMedia("(prefers-color-scheme: light)").addEventListener("change", (e) => {
+      try { if (localStorage.getItem("av-theme")) return; } catch (err) {}
+      setTheme(e.matches ? "light" : "dark", false);
+    });
+  };
+
+  window.AV = { form, isLight };
+  const start = () => { glass(); themeSwitch(); if (document.body.dataset.page === "inner") innerPage(); };
   document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", start) : start();
 })();

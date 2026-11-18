@@ -15,7 +15,10 @@
   // The CTA chip is only built when the visitor gets near the end of the page (saves a WebGL scene at load)
   const C = { rotX: 0.9, rotY: -0.8, scale: 0.5, y: 1.35, reveal: 0, logo: 1, glow: 0.8, introY: 0, introA: 0, intensity: 0.9 };
   let ctaChip = null;
-  const makeCta = () => (ctaChip || !window.AVChip ? ctaChip : (ctaChip = window.AVChip.init($("#cta-canvas"), C, C)));
+  const light = () => document.documentElement.dataset.theme === "light";
+  const makeCta = () => { if (!ctaChip && window.AVChip) { ctaChip = window.AVChip.init($("#cta-canvas"), C, C); ctaChip && ctaChip.setTheme(light()); } return ctaChip; };
+  chip && chip.setTheme(light());
+  addEventListener("av-theme", () => [chip, ctaChip].forEach((c) => c && c.setTheme(light())));
   if (!chip) document.documentElement.classList.add("no-webgl");
   const S = chip ? chip.state : {};
   const P = shield ? shield.state : {};
@@ -243,7 +246,7 @@
 
     /* 4. Privacy: headline lights up word by word; trackers keep bouncing off the vault while it is on screen */
     const pWords = SplitText.create(".privacy__title", { type: "words", wordsClass: "w" });
-    gsap.to(pWords.words, { color: "#f5f5f7", stagger: 0.1, ease: "none", scrollTrigger: { trigger: ".privacy__title", start: "top 85%", end: "bottom 50%", scrub: 0.6 } });
+    gsap.to(pWords.words, { opacity: 1, stagger: 0.1, ease: "none", scrollTrigger: { trigger: ".privacy__title", start: "top 85%", end: "bottom 50%", scrub: 0.6 } });
     gsap.from(".privacy__copy .eyebrow, .privacy__sub, .privacy__points li", { y: 30, autoAlpha: 0, duration: 1, stagger: 0.1, ease: "expo.out", scrollTrigger: { trigger: ".privacy__copy", start: "top 80%", once: true } });
     const vault = $(".vault"), trackers = $$(".tracker");
     const far = () => vault.offsetWidth * 0.95, near = () => vault.offsetWidth * 0.38 + 17;

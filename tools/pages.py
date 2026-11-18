@@ -15,7 +15,7 @@ fix = lambda h: re.sub(r'href="#', 'href="/#', h).replace('href="/#main"', 'href
 chrome, footer = fix(chrome), fix(footer)
 
 UPDATED = "18 November 2026"
-V = "20261118e"  # bump on every release so browsers load fresh CSS/JS (also in index.html links)
+V = "20261118f"  # bump on every release so browsers load fresh CSS/JS (also in index.html links)
 PAGES = {}
 
 PAGES["privacy"] = ("Privacy Policy", "How Antiviotic handles the little data this website collects, and how the app is designed to keep your phone's data on your phone.", f"""
@@ -129,6 +129,7 @@ for slug, (title, desc, body) in PAGES.items():
   <title>{title} | Antiviotic</title>
   <meta name="description" content="{desc}" />
   <meta name="theme-color" content="#000000" />
+  <script>try{{var t=localStorage.getItem("av-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.dataset.theme=t;}}catch(e){{document.documentElement.dataset.theme="dark";}}</script>
 {meta_extra}  <meta property="og:title" content="{title} | Antiviotic" />
   <meta property="og:description" content="{desc}" />
   <meta property="og:image" content="https://antiviotic.com/og.jpg" />
