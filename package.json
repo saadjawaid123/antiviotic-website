@@ -1,13 +1,14 @@
 {
   "name": "antiviotic-website",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Antiviotic marketing site. Static HTML + GSAP + Lenis, with a Three.js chip bundled to js/chip.js.",
   "scripts": {
     "build": "esbuild src/chip.js --bundle --minify --format=iife --target=es2020 --outfile=js/chip.js"
   },
   "devDependencies": {
     "esbuild": "^0.25.0",
-    "three": "^0.187.0"
+    "three": "^0.187.0",
+    "wrangler": "^4.50.0"
   }
 }

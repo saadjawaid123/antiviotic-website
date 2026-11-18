@@ -1,5 +1,16 @@
 name = "antiviotic-website"
+main = "worker.js"
 compatibility_date = "2026-11-13"
 
+# Static site: every file in this folder (minus .assetsignore) is served as is.
+# Requests that match no file fall through to worker.js (form API + 404 page).
 [assets]
 directory = "."
+binding = "ASSETS"
+html_handling = "drop-trailing-slash"
+not_found_handling = "404-page"
+
+# Waitlist and contact messages. No id on purpose: wrangler creates the namespace on the first deploy
+# (automatic provisioning, wrangler 4.45+) and keeps it linked after that.
+[[kv_namespaces]]
+binding = "WAITLIST"

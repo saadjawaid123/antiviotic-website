@@ -3,9 +3,12 @@
 .gitignore
 .assetsignore
 wrangler.toml
+worker.js
 package.json
 package-lock.json
 node_modules
 src
+tools
 README.md
 .DS_Store
+.wrangler

@@ -22,7 +22,9 @@ function rng(seed) {
 
 /* Circuit traces baked into a data texture:
    R = trace mask, G = distance from the chip (0..1). The shader uses G for the reveal and the travelling light pulses. */
+let traceCanvas = null; // drawn once, shared by every chip on the page
 function makeTraceTexture() {
+  if (traceCanvas) { const t = new THREE.CanvasTexture(traceCanvas); t.anisotropy = 8; return t; }
   const size = 2048, world = 18, s = size / world, c = size / 2;
   const cv = document.createElement('canvas');
   cv.width = cv.height = size;
@@ -145,10 +147,10 @@ function radialTexture() {
   return t;
 }
 
-function init(canvas, initial = {}) {
+function init(canvas, initial = {}, target = null) {
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
   } catch (e) {
     return null;
   }
@@ -272,12 +274,25 @@ function init(canvas, initial = {}) {
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
 
-  const state = { rotX: 0.32, rotY: -0.55, scale: 0.55, y: -1.25, reveal: 0, intensity: 1, logo: 0, glow: 0.25, introY: -1, introA: 0 };
-  Object.assign(state, initial);
+  // `target`: an object main.js already animates; the chip reads from it directly (used to start the CTA chip late)
+  const defaults = { rotX: 0.32, rotY: -0.55, scale: 0.55, y: -1.25, reveal: 0, intensity: 1, logo: 0, glow: 0.25, introY: -1, introA: 0 };
+  const state = Object.assign(target || {}, { ...defaults, ...initial, ...(target || {}) });
+
+  // Adaptive sharpness: if frames run slow (weaker graphics chips), drop the resolution a step, down to 1x
+  let prCap = 9, slow = 0, frames = 0, lastT = 0;
+  const watch = (now) => {
+    const dt = now - lastT; lastT = now;
+    if (dt > 0 && dt < 250) { frames++; if (dt > 21) slow++; }
+    if (frames >= 45) {
+      const cur = Math.min(window.devicePixelRatio || 1, prCap);
+      if (slow > 18 && cur > 1) { prCap = Math.max(1, cur - 0.25); resize(); }
+      frames = slow = 0;
+    }
+  };
 
   function resize() {
     const w = canvas.clientWidth || innerWidth, h = canvas.clientHeight || innerHeight;
-    const pr = Math.min(window.devicePixelRatio || 1, w < 700 ? 1.5 : 1.75);
+    const pr = Math.min(window.devicePixelRatio || 1, w < 700 ? 1.3 : 1.75, prCap);
     renderer.setPixelRatio(pr);
     renderer.setSize(w, h, false);
     composer.setPixelRatio(pr);
@@ -306,7 +321,7 @@ function init(canvas, initial = {}) {
   }
 
   let active = false, raf = 0;
-  const loop = (now) => { if (!active) { raf = 0; return; } draw(now); raf = requestAnimationFrame(loop); };
+  const loop = (now) => { if (!active) { raf = 0; lastT = 0; return; } watch(now); draw(now); raf = requestAnimationFrame(loop); };
   const setActive = (on) => { active = on; if (on && !raf) raf = requestAnimationFrame(loop); };
 
   new ResizeObserver(resize).observe(canvas);

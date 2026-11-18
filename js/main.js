@@ -9,13 +9,19 @@
   /* ---------- WebGL scenes ---------- */
   const chip = window.AVChip ? window.AVChip.init($("#chip-canvas")) : null;
   const shield = window.AVParticles ? window.AVParticles.init($("#shield-canvas")) : null;
-  const ctaChip = window.AVChip ? window.AVChip.init($("#cta-canvas"), { rotX: 0.9, rotY: -0.8, scale: 0.5, y: 1.35, reveal: 0, logo: 1, glow: 0.8, introY: 0, introA: 0, intensity: 0.9 }) : null;
+  // The CTA chip is only built when the visitor gets near the end of the page (saves a WebGL scene at load)
+  const C = { rotX: 0.9, rotY: -0.8, scale: 0.5, y: 1.35, reveal: 0, logo: 1, glow: 0.8, introY: 0, introA: 0, intensity: 0.9 };
+  let ctaChip = null;
+  const makeCta = () => (ctaChip || !window.AVChip ? ctaChip : (ctaChip = window.AVChip.init($("#cta-canvas"), C, C)));
   if (!chip) document.documentElement.classList.add("no-webgl");
   const S = chip ? chip.state : {};
   const P = shield ? shield.state : {};
-  const C = ctaChip ? ctaChip.state : {};
   // Each scene renders only while its section is on screen
   const runWhileVisible = (scene, trigger) => scene && ScrollTrigger.create({ trigger, start: "top bottom", end: "bottom top", onToggle: (s) => scene.setActive(s.isActive) });
+
+  /* Looping CSS animations (threat cards, vault, FAQ dots, footer) only run while their section is on screen */
+  const io = new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle("is-off", !e.isIntersecting)), { rootMargin: "200px 0px" });
+  $$(".threats, .privacy, .faq, .footer, .tour").forEach((el) => io.observe(el));
 
   /* ---------- Smooth scroll ---------- */
   let lenis = null;
@@ -112,24 +118,14 @@
     gsap.to(mark, { "--mx": e.clientX - r.left + "px", "--my": e.clientY - r.top + "px", duration: 0.5, ease: "power3.out" });
   });
 
-  /* ---------- Waitlist (front-end only for now) ---------- */
-  const form = $(".waitlist");
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const input = $("#email", form), msg = $(".waitlist__msg", form);
-    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(input.value.trim());
-    msg.classList.toggle("is-error", !ok);
-    msg.textContent = ok ? "You are on the list. We will email you at launch." : "Please enter a valid email address.";
-    if (!ok) { input.focus(); return; }
-    input.value = "";
-    if (!reduce) gsap.fromTo(msg, { y: 8, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5 });
-  });
+  window.AV.form(document.querySelector(".waitlist"), "/api/waitlist", (d) => d.already ? "You are already on the list. We will email you at launch." : "You are on the list. We will email you at launch.");
 
   /* ---------- Reduced motion: final states, no pins ---------- */
   if (reduce) {
     Object.assign(S, { rotX: 1.12, rotY: 0.16, scale: 0.9, y: 0.6, reveal: 1.15, logo: 1, glow: 1, introY: 0, introA: 1 });
     Object.assign(P, { morph: 1 });
     Object.assign(C, { rotX: 1.38, rotY: 0.1, reveal: 1.15, introA: 1 });
+    makeCta();
     [chip, shield, ctaChip].forEach((x) => x && x.renderOnce());
     gsap.set(".ov-stat, .zoom__after, .vault__badge", { autoAlpha: 1 });
     gsap.set(".zoom__title", { autoAlpha: 0 });
@@ -147,7 +143,7 @@
     const title = SplitText.create(".hero-title", { type: "chars", charsClass: "char" });
     gsap.timeline({ defaults: { ease: "expo.out" } })
       .to(".hero-eyebrow", { autoAlpha: 1, y: 0, duration: 1.2 }, 0.1)
-      .from(title.chars, { autoAlpha: 0, yPercent: 30, filter: "blur(16px)", duration: 1.6, stagger: 0.045 }, 0.2)
+      .from(title.chars, { autoAlpha: 0, yPercent: 30, filter: "blur(8px)", duration: 1.6, stagger: 0.045, clearProps: "filter" }, 0.2)
       .to(".hero-sub", { autoAlpha: 1, y: 0, duration: 1.2 }, 0.75)
       .to(".hero-ctas", { autoAlpha: 1, y: 0, duration: 1.2 }, 0.9)
       .to(S, { introY: 0, introA: 1, duration: 2.6, ease: "power3.out" }, 0)
@@ -161,7 +157,7 @@
       defaults: { ease: "none" },
       scrollTrigger: { trigger: ".overview", start: "top top", end: "+=340%", pin: true, scrub: 1.2, onLeave: () => chip && chip.setActive(false), onEnterBack: () => chip && chip.setActive(true) },
     })
-      .to(".hero-copy", { autoAlpha: 0, scale: 0.9, y: -50, filter: "blur(10px)", duration: 1.6 }, 0)
+      .to(".hero-copy", { autoAlpha: 0, scale: 0.9, y: -50, duration: 1.6 }, 0)
       .to(S, { rotX: 1.12, rotY: 0.16, scale: 0.98, y: 0.62, duration: 6, ease: "power2.inOut" }, 0)
       .to(S, { reveal: 1.15, duration: 5, ease: "power1.inOut" }, 0.8)
       .to(S, { logo: 1, glow: 1, duration: 2.5 }, 3)
@@ -175,10 +171,10 @@
     /* 2. Security: title zooms in over red threat particles, then the particles fly together into the shield */
     const zoomTl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: ".zoom", start: "top top", end: "+=280%", pin: true, scrub: 1 } });
     zoomTl
-      .fromTo(".zoom__title", { scale: 3.4, autoAlpha: 0, filter: "blur(24px)" }, { scale: 1, autoAlpha: 1, filter: "blur(0px)", duration: 3, ease: "power3.out" }, 0)
+      .fromTo(".zoom__title", { scale: 3.4, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 3, ease: "power3.out" }, 0)
       .fromTo(P, { alpha: 0 }, { alpha: 1, duration: 2 }, 0)
       .to(".zoom__title", { backgroundPosition: "100% 0", duration: 2, ease: "none" }, 2.4)
-      .to(".zoom__title", { autoAlpha: 0, scale: 0.8, filter: "blur(14px)", duration: 1.2, ease: "power2.in" }, 4.6)
+      .to(".zoom__title", { autoAlpha: 0, scale: 0.8, duration: 1.2, ease: "power2.in" }, 4.6)
       .to(P, { morph: 1, duration: 3.4, ease: "power2.inOut" }, 4.8)
       .fromTo(".zoom__after", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 1.2, ease: "power2.out" }, 7.6)
       .to({}, { duration: 1 });
@@ -228,7 +224,7 @@
         .fromTo(".scanbeam", { yPercent: -100 }, { yPercent: 194, duration: 1.1, ease: "power1.inOut" }, at + 0.1)
         .set(".scanbeam", { yPercent: -110 }, at + 1.25)
         .set(screens[i - 1], { autoAlpha: 0 }, at + 1.25)
-        .to(".tour__aura", { backgroundColor: auras[i], duration: 0.9 }, at + 0.1)
+        .to(".tour__aura", { "--aura": auras[i], duration: 0.9 }, at + 0.1)
         .to(words[i - 1], { autoAlpha: 0, duration: 0.5 }, at)
         .fromTo(words[i], { autoAlpha: 0, scale: 1.15 }, { autoAlpha: 1, scale: 1, duration: 0.9, ease: "power2.out" }, at + 0.4);
     };
@@ -284,7 +280,10 @@
 
     // Spy-app eye follows the cursor (wanders on touch screens)
     const pupil = $(".sc-eye__pupil"), eye = $(".sc-eye");
+    let eyeOn = false;
+    ScrollTrigger.create({ trigger: ".threats", start: "top bottom", end: "bottom top", onToggle: (s) => (eyeOn = s.isActive) });
     if (fine) window.addEventListener("pointermove", (e) => {
+      if (!eyeOn) return;
       const r = eye.getBoundingClientRect();
       const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
       const a = Math.atan2(dy, dx), d = Math.min(1, Math.hypot(dx, dy) / 300);
@@ -324,23 +323,26 @@
       gsap.set(cards, { transformPerspective: 1200 });
       const rotY = cards.map((c) => gsap.quickSetter(c, "rotationY", "deg"));
       const scl = cards.map((c) => gsap.quickSetter(c, "scale"));
+      // Card centres are measured once (on refresh); while scrolling only the track's x changes, so no layout reads per frame
+      let centres = [], base = 0;
+      const measure = () => { const tx = gsap.getProperty(track, "x"); base = track.getBoundingClientRect().left - tx; centres = cards.map((c) => c.offsetLeft + c.offsetWidth / 2); };
       const cover = () => {
-        const mid = innerWidth / 2;
+        const mid = innerWidth / 2, tx = gsap.getProperty(track, "x");
         cards.forEach((c, i) => {
-          const r = c.getBoundingClientRect();
-          const off = gsap.utils.clamp(-1.3, 1.3, (r.left + r.width / 2 - mid) / mid);
+          const off = gsap.utils.clamp(-1.3, 1.3, (base + tx + centres[i] - mid) / mid);
           rotY[i](-off * 24);
           scl[i](1 - Math.abs(off) * 0.07);
         });
       };
       const dist = () => track.scrollWidth - innerWidth;
-      gsap.to(track, { x: () => -dist(), ease: "none", scrollTrigger: { trigger: ".threats", start: "top top", end: () => "+=" + dist(), pin: true, scrub: 1, invalidateOnRefresh: true, onUpdate: cover, onRefresh: cover } });
-      cover();
+      gsap.to(track, { x: () => -dist(), ease: "none", scrollTrigger: { trigger: ".threats", start: "top top", end: () => "+=" + dist(), pin: true, scrub: 1, invalidateOnRefresh: true, onUpdate: cover, onRefresh: () => { measure(); cover(); } } });
+      measure(); cover();
     });
     mm.add("(max-width: 1000px)", () => rise(".tcard", ".threats__track"));
 
     /* 6. CTA: the chip returns, circuits race out behind the final message */
-    runWhileVisible(ctaChip, ".cta");
+    ScrollTrigger.create({ trigger: ".cta", start: () => "top bottom+=" + innerHeight * 1.5, once: true, onEnter: makeCta });
+    ScrollTrigger.create({ trigger: ".cta", start: "top bottom", end: "bottom top", onToggle: (s) => { const c = makeCta(); c && c.setActive(s.isActive); } });
     gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: ".cta", start: "top 85%", end: "top top", scrub: 1 } })
       .to(C, { introA: 1, duration: 0.6 }, 0)
       .to(C, { rotX: 1.38, rotY: 0.1, duration: 1, ease: "power2.out" }, 0)

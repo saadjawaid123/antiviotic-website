@@ -130,9 +130,21 @@ function init(canvas) {
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
   window.addEventListener('pointermove', (e) => { mouse.tx = e.clientX / innerWidth - 0.5; mouse.ty = e.clientY / innerHeight - 0.5; });
 
+  // Adaptive sharpness: if frames run slow (weaker graphics chips), drop the resolution a step, down to 1x
+  let prCap = 9, slow = 0, frames = 0, lastT = 0;
+  const watch = (now) => {
+    const dt = now - lastT; lastT = now;
+    if (dt > 0 && dt < 250) { frames++; if (dt > 21) slow++; }
+    if (frames >= 45) {
+      const cur = Math.min(window.devicePixelRatio || 1, prCap);
+      if (slow > 18 && cur > 1) { prCap = Math.max(1, cur - 0.25); resize(); }
+      frames = slow = 0;
+    }
+  };
+
   function resize() {
     const w = canvas.clientWidth || innerWidth, h = canvas.clientHeight || innerHeight;
-    const pr = Math.min(window.devicePixelRatio || 1, 1.75);
+    const pr = Math.min(window.devicePixelRatio || 1, w < 700 ? 1.5 : 1.75, prCap);
     renderer.setPixelRatio(pr);
     renderer.setSize(w, h, false);
     mat.uniforms.uPR.value = pr;
@@ -155,7 +167,7 @@ function init(canvas) {
   }
 
   let active = false, raf = 0;
-  const loop = (now) => { if (!active) { raf = 0; return; } draw(now); raf = requestAnimationFrame(loop); };
+  const loop = (now) => { if (!active) { raf = 0; lastT = 0; return; } watch(now); draw(now); raf = requestAnimationFrame(loop); };
   const setActive = (on) => { active = on; if (on && !raf) raf = requestAnimationFrame(loop); };
 
   new ResizeObserver(resize).observe(canvas);

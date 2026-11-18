@@ -1,0 +1,36 @@
+/* Inner pages: Privacy, Terms, Contact, 404. Loaded after style.css. */
+.doc { position: relative; min-height: 80vh; padding: 150px 24px 120px; overflow: hidden; }
+.doc__glow { position: absolute; top: -260px; left: 50%; width: 1100px; height: 640px; margin-left: -550px; pointer-events: none; background: radial-gradient(closest-side, rgba(76, 242, 176, 0.16), rgba(58, 184, 255, 0.08) 45%, transparent 75%); filter: blur(10px); }
+.doc__inner { position: relative; max-width: 720px; margin: 0 auto; }
+.doc__title { font: 700 clamp(44px, 7vw, 80px)/1.02 var(--head); letter-spacing: -0.045em; margin-bottom: 14px; }
+.doc__date { color: var(--muted); font-size: 14px; margin-bottom: 40px; }
+.doc__lead { font: 500 clamp(19px, 2vw, 23px)/1.45 var(--head); letter-spacing: -0.01em; color: #d2d2d7; margin: 28px 0 48px; padding-left: 18px; border-left: 2px solid; border-image: var(--grad) 1; }
+.doc h2 { font: 600 24px/1.25 var(--head); letter-spacing: -0.02em; margin: 52px 0 14px; scroll-margin-top: 100px; }
+.doc h2:target { color: #4cf2b0; }
+.doc p, .doc li { color: #c7c7cc; font-size: 17px; line-height: 1.65; }
+.doc p + p { margin-top: 14px; }
+.doc ul { display: grid; gap: 12px; margin: 14px 0; }
+.doc li { position: relative; padding-left: 22px; }
+.doc li::before { content: ""; position: absolute; left: 2px; top: 0.72em; width: 7px; height: 7px; border-radius: 50%; background: var(--grad); }
+.doc li b { color: var(--text); font-weight: 600; }
+.doc article a:not(.pill) { color: var(--text); text-decoration: underline; text-decoration-color: rgba(76, 242, 176, 0.5); text-underline-offset: 3px; transition: text-decoration-color 0.25s, color 0.25s; }
+.doc article a:not(.pill):hover { color: #4cf2b0; text-decoration-color: #4cf2b0; }
+.doc__actions { margin-top: 12px; }
+
+/* Contact form: same glass language as the waitlist */
+.cform { display: grid; gap: 16px; margin-top: 8px; }
+.cform__row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.cform label { display: grid; gap: 8px; }
+.cform label span { font-size: 13px; font-weight: 500; color: var(--muted); }
+.cform input, .cform textarea { width: 100%; font: 400 16px/1.5 var(--body); color: var(--text); padding: 14px 18px; border: 0; border-radius: 18px; background: rgba(255, 255, 255, 0.05); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08); transition: box-shadow 0.3s; resize: vertical; }
+.cform input:focus, .cform textarea:focus { outline: 0; box-shadow: inset 0 0 0 1px rgba(76, 242, 176, 0.6), 0 0 0 5px rgba(76, 242, 176, 0.12); }
+.cform__foot { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 6px; }
+.cform__msg { font-size: 15px; color: #4cf2b0; min-height: 1.4em; }
+.cform__msg.is-error { color: #ff6961; }
+.doc .cform__note { font-size: 13px; color: var(--muted); }
+@media (max-width: 640px) { .cform__row { grid-template-columns: 1fr; } .doc { padding-top: 120px; } }
+
+/* Inner-page header: links lead back to the home page, so no active pill; menu opens with a class instead of GSAP */
+.nav.is-inner .nav__pill { display: none; }
+.menu { transition: opacity 0.4s, visibility 0.4s; }
+.menu.is-open { opacity: 1; visibility: visible; }
