@@ -1,80 +1,390 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Antiviotic - Your Phone's Immune System</title>
-<style>
-  :root{
-    --bg:#0b0f14; --card:#121821; --text:#eef2f6; --muted:#8a97a6;
-    --accent:#3ddc97; --accent2:#2bb8ff;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  body{
-    background:var(--bg); color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    min-height:100vh; display:flex; flex-direction:column; align-items:center;
-  }
-  header{padding:80px 20px 40px; text-align:center; max-width:640px;}
-  .logo{
-    font-size:14px; letter-spacing:3px; text-transform:uppercase;
-    color:var(--accent); font-weight:600; margin-bottom:24px;
-  }
-  h1{font-size:clamp(32px,6vw,52px); line-height:1.1; margin-bottom:16px;}
-  h1 span{
-    background:linear-gradient(90deg,var(--accent),var(--accent2));
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-  }
-  p.sub{color:var(--muted); font-size:18px; line-height:1.6;}
-  .pill{
-    display:inline-block; margin-top:28px; padding:12px 28px;
-    border:1px solid var(--accent); color:var(--accent);
-    border-radius:999px; font-size:14px; letter-spacing:0.5px;
-  }
-  .features{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:16px; max-width:900px; width:100%; padding:40px 20px;
-  }
-  .card{
-    background:var(--card); border:1px solid #1e2733; border-radius:12px;
-    padding:24px; text-align:left;
-  }
-  .card .icon{font-size:24px; margin-bottom:12px;}
-  .card h3{font-size:16px; margin-bottom:6px;}
-  .card p{color:var(--muted); font-size:14px; line-height:1.5;}
-  footer{padding:40px 20px 60px; color:var(--muted); font-size:13px; text-align:center;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Antiviotic. The antibiotic for your phone.</title>
+  <meta name="description" content="Antiviotic checks every link, file and message before you open it, and stops scams, phishing and account takeovers. Free for Android and iOS." />
+  <meta name="theme-color" content="#000000" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="vendor/lenis.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <a class="skip" href="#main">Skip to content</a>
 
-  <header>
-    <div class="logo">ANTIVIOTIC</div>
-    <h1>Your phone's <span>immune system</span></h1>
-    <p class="sub">Real-time protection against malicious links, scam messages, and malware, before they reach you.</p>
-    <div class="pill">Coming soon to Android &amp; iOS</div>
+
+  <header class="nav">
+    <div class="nav__inner">
+      <a href="#overview" class="nav__brand" aria-label="Antiviotic home">
+        <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true">
+          <path class="logo-shield" d="M16 2 4 7v8c0 7.5 5.1 13.4 12 15 6.9-1.6 12-7.5 12-15V7L16 2Z" fill="none" stroke="currentColor" stroke-width="2.2"/>
+          <g transform="rotate(35 16 16.5)"><rect class="logo-pill" x="11.8" y="10.5" width="8.4" height="12" rx="4.2" fill="none" stroke="url(#lg)" stroke-width="2.2"/><path d="M11.8 16.5h8.4" stroke="url(#lg)" stroke-width="2.2"/></g>
+          <defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#4cf2b0"/><stop offset="1" stop-color="#3ab8ff"/></linearGradient></defs>
+        </svg>
+        <span>Antiviotic</span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav__links">
+          <span class="nav__pill" aria-hidden="true"></span>
+          <li><a href="#overview">Overview</a></li><li><a href="#security">Security</a></li><li><a href="#privacy">Privacy</a></li><li><a href="#threats">Threats</a></li><li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <div class="nav__right">
+        <a href="#join" class="pill pill--sm nav-join"><span class="pill__label" data-roll>Join waitlist</span><span class="pill__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+        <button class="nav__burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
+      </div>
+      <span class="nav__progress" aria-hidden="true"><i></i></span>
+    </div>
   </header>
 
-  <section class="features">
-    <div class="card">
-      <div class="icon">🛡️</div>
-      <h3>Real-time scanning</h3>
-      <p>Catches malicious links and files the moment they land on your phone.</p>
-    </div>
-    <div class="card">
-      <div class="icon">⚡</div>
-      <h3>Zero slowdown</h3>
-      <p>Lightweight by design. Protection that doesn't drain your battery.</p>
-    </div>
-    <div class="card">
-      <div class="icon">🆓</div>
-      <h3>Free, always</h3>
-      <p>No subscriptions, no hidden paywalls for core protection.</p>
-    </div>
-  </section>
+  <div class="menu" id="menu" aria-hidden="true">
+    <ul class="menu__links">
+      <li><a href="#overview"><small>01</small>Overview</a></li><li><a href="#security"><small>02</small>Security</a></li><li><a href="#privacy"><small>03</small>Privacy</a></li><li><a href="#threats"><small>04</small>Threats</a></li><li><a href="#faq"><small>05</small>FAQ</a></li>
+    </ul>
+    <a href="#join" class="pill menu__cta"><span class="pill__label" data-roll>Join the waitlist</span><span class="pill__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+  </div>
 
-  <footer>
-    &copy; 2026 Antiviotic. All rights reserved. &middot; Built by <a href="https://saadjawaid.com" style="color:var(--accent); text-decoration:none;">Saad Jawaid</a>
+  <main id="main">
+
+    <!-- 1. HERO + 3D CHIP (pinned) -->
+    <section class="overview" id="overview">
+      <div class="overview__stage">
+        <canvas id="chip-canvas" aria-hidden="true"></canvas>
+        <div class="no-webgl-glow" aria-hidden="true"></div>
+
+        <div class="hero-copy">
+          <p class="hero-eyebrow">Introducing</p>
+          <h1 class="hero-title">Antiviotic</h1>
+          <p class="hero-sub">The antibiotic for your phone.</p>
+          <div class="hero-ctas">
+            <a href="#join" class="pill"><span class="pill__label" data-roll>Join the waitlist</span><span class="pill__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+            <a href="#security" class="ghost"><span class="ghost__label" data-roll>See how it works</span><span class="ghost__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14m-6-6 6 6 6-6"/></svg></span></a>
+          </div>
+        </div>
+
+        <div class="ov-cap">
+          <p class="eyebrow grad">AV1 Shield Engine</p>
+          <h2 class="ov-cap__title">A security brain.<br />Built for one job.</h2>
+        </div>
+
+        <div class="ov-stats">
+          <div class="ov-stat"><span class="ov-stat__val grad">&lt;0.4s</span><span class="ov-stat__label">to check a link<br />before it opens</span></div>
+          <div class="ov-stat"><span class="ov-stat__val grad">100%</span><span class="ov-stat__label">on-device<br />analysis</span></div>
+          <div class="ov-stat"><span class="ov-stat__val grad">24/7</span><span class="ov-stat__label">real-time<br />protection</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. ZOOM STATEMENT (pinned) -->
+    <section class="zoom" id="security">
+      <div class="zoom__stage">
+        <canvas id="shield-canvas" aria-hidden="true"></canvas>
+        <h2 class="zoom__title">Security.<br />Built in.</h2>
+        <div class="zoom__after">
+          <h3>Every threat,<br />turned into a shield.</h3>
+          <p>Antiviotic watches every link, file and message, and steps in before the damage is done. Quietly. Instantly. In plain words.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PHONE TOUR (pinned) -->
+    <section class="tour" aria-label="Feature tour">
+      <div class="tour__stage">
+        <div class="tour__words" aria-hidden="true"><span>BLOCKED</span><span>REMOVED</span><span>WARNED</span><span>PROTECTED</span></div>
+        <div class="tour__caps">
+          <article class="tour__cap">
+            <p class="eyebrow grad">Link Shield</p>
+            <h3>Scam links <br />stop here.</h3>
+            <p>Every link in WhatsApp, SMS, email and your browser is checked before it opens. Fake login pages never load.</p>
+          </article>
+          <article class="tour__cap">
+            <p class="eyebrow grad">File and App Scan</p>
+            <h3>Fake apps <br />can't hide.</h3>
+            <p>Files like invoice.apk or photo.pdf are scanned the moment they arrive. Harmful ones are removed in one tap.</p>
+          </article>
+          <article class="tour__cap">
+            <p class="eyebrow grad">Takeover Alerts</p>
+            <h3>Your accounts <br />stay yours.</h3>
+            <p>When someone tries to get your WhatsApp or OTP code, Antiviotic warns you right away, in plain words.</p>
+          </article>
+          <article class="tour__cap">
+            <p class="eyebrow grad">Protection Dashboard</p>
+            <h3>All clear. <br />And you know it.</h3>
+            <p>One calm screen shows what was checked and what was stopped. No jargon, no scary codes.</p>
+          </article>
+        </div>
+
+        <div class="tour__phone">
+          <div class="tour__aura" aria-hidden="true"></div>
+          <div class="phone-tilt">
+          <div class="phone" role="img" aria-label="Demo screens of the Antiviotic app">
+            <div class="phone__inner">
+              <div class="phone__screen">
+                <div class="island"></div>
+                <div class="scanbeam" aria-hidden="true"></div>
+                <div class="statusbar"><span>9:41</span><span class="statusbar__icons"><i class="sig"></i><i class="wifi"></i><i class="bat"></i></span></div>
+
+                <!-- Screen 1: Messages -->
+                <div class="screen s1">
+                  <div class="msg-head">
+                    <span class="msg-back">&#8249;</span>
+                    <div class="msg-contact"><span class="avatar">BK</span><span class="msg-name">Unknown sender</span></div>
+                    <span></span>
+                  </div>
+                  <p class="msg-time">Today 9:38 AM</p>
+                  <div class="bubble">Your bank account has been suspended. Verify within 24 hours: <span class="msg-link">secure-bank-verify.top/login</span></div>
+                  <div class="sheet">
+                    <span class="sheet__icon"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M12 2 4 5v6c0 5.5 3.4 9.9 8 11 4.6-1.1 8-5.5 8-11V5l-8-3Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="m9.5 9.5 5 5m0-5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+                    <strong>This link is a scam</strong>
+                    <p>It copies a real bank login page to steal your password.</p>
+                    <span class="sheet__btn">Delete message</span>
+                    <span class="sheet__alt">Report and block sender</span>
+                  </div>
+                </div>
+
+                <!-- Screen 2: Files -->
+                <div class="screen s2">
+                  <h4 class="large-title">Downloads</h4>
+                  <div class="search">Search</div>
+                  <ul class="files">
+                    <li class="file file--bad">
+                      <span class="file__icon apk">APK</span>
+                      <span class="file__meta"><b>invoice_march.apk</b><small>2.4 MB · WhatsApp</small></span>
+                      <span class="file__state">
+                        <svg class="ring" viewBox="0 0 36 36" width="30" height="30"><circle cx="18" cy="18" r="15" class="ring__bg"/><circle cx="18" cy="18" r="15" class="ring__fg"/></svg>
+                        <span class="badge badge--bad">Blocked</span>
+                      </span>
+                    </li>
+                    <li class="file">
+                      <span class="file__icon pdf">PDF</span>
+                      <span class="file__meta"><b>receipt_0412.pdf</b><small>180 KB · Gmail</small></span>
+                      <span class="badge badge--ok">Safe</span>
+                    </li>
+                    <li class="file">
+                      <span class="file__icon jpg">JPG</span>
+                      <span class="file__meta"><b>family_dinner.jpg</b><small>3.1 MB · Camera</small></span>
+                      <span class="badge badge--ok">Safe</span>
+                    </li>
+                  </ul>
+                  <div class="toast">
+                    <strong>Fake app removed</strong>
+                    <span>It was trying to read your SMS codes.</span>
+                  </div>
+                </div>
+
+                <!-- Screen 3: Lock screen alert -->
+                <div class="screen s3">
+                  <p class="lock-date">Wednesday 18 November</p>
+                  <p class="lock-time">9:41</p>
+                  <div class="notif notif--back">
+                    <span class="notif__app msg"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M21 12a8 8 0 0 1-11.8 7L4 20l1.1-4.4A8 8 0 1 1 21 12Z" fill="#fff"/></svg></span>
+                    <div><b>Messages</b><p>Your WhatsApp code: 482-913. Don't share this code.</p></div>
+                  </div>
+                  <div class="notif notif--front">
+                    <span class="notif__app av"><svg viewBox="0 0 32 32" width="18" height="18"><path d="M16 2 4 7v8c0 7.5 5.1 13.4 12 15 6.9-1.6 12-7.5 12-15V7L16 2Z" fill="none" stroke="#000" stroke-width="3"/></svg></span>
+                    <div><b>Antiviotic <small>now</small></b><p><strong>Someone wants your WhatsApp code.</strong> Never share it. WhatsApp will never ask for it in a message.</p></div>
+                  </div>
+                  <div class="lock-btns"><span></span><span></span></div>
+                </div>
+
+                <!-- Screen 4: Dashboard -->
+                <div class="screen s4">
+                  <p class="dash-title">Antiviotic</p>
+                  <div class="dash-ring">
+                    <div class="dash-ring__inner">
+                      <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="#4cf2b0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      <b>Protected</b>
+                      <small>All clear today</small>
+                    </div>
+                  </div>
+                  <div class="dash-grid">
+                    <div><b data-n="128">0</b><small>Links checked</small></div>
+                    <div><b data-n="3">0</b><small>Threats stopped</small></div>
+                    <div><b data-n="46">0</b><small>Apps scanned</small></div>
+                    <div><b>Now</b><small>Last check</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          <p class="tour__note">Design preview</p>
+        </div>
+
+        <div class="tour__progress" aria-hidden="true">
+          <span class="tour__bar"><i></i></span>
+          <ol><li class="is-on"></li><li></li><li></li><li></li></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRIVACY -->
+    <section class="privacy" id="privacy">
+      <div class="privacy__grid">
+        <div class="privacy__copy">
+          <p class="eyebrow grad">Privacy</p>
+          <h2 class="privacy__title">What happens on your phone stays on your phone.</h2>
+          <p class="privacy__sub">Antiviotic checks links and files on your device. Your messages are never uploaded, read or sold.</p>
+          <ul class="privacy__points">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg><b>On-device checks</b><span>Analysis runs on your phone, not on our servers.</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m6 6 12 12"/></svg><b>No ads. Ever.</b><span>Free protection, without trackers or ad networks.</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.9 8.3 7 9.5 4.1-1.2 7-4.9 7-9.5V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg><b>Your data stays yours</b><span>We never sell or share what is on your phone.</span></li>
+      </ul>
+        </div>
+        <div class="vault" aria-hidden="true">
+          <div class="vault__glow"></div>
+          <div class="vault__sphere"></div>
+          <div class="vault__flash"></div>
+          <div class="vault__ring"><span class="vchip" style="--a:0deg"><span class="vchip__in" style="--c:#30d158"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.8 7L4 20l1.1-4.4A8 8 0 1 1 21 12Z"/></svg>Messages</span></span><span class="vchip" style="--a:90deg"><span class="vchip__in" style="--c:#ff9f0a"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m21 16-5-5-8 8"/></svg>Photos</span></span><span class="vchip" style="--a:180deg"><span class="vchip__in" style="--c:#0a84ff"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>Location</span></span><span class="vchip" style="--a:270deg"><span class="vchip__in" style="--c:#bf5af2"><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9m-3 3 3 3m-6 0 2 2"/></svg>Passwords</span></span></div>
+          <div class="vault__phone">
+            <svg viewBox="0 0 120 150" width="44" height="55"><path class="vlock__shackle" d="M32 70V46a28 28 0 0 1 56 0v24" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round"/><rect x="12" y="64" width="96" height="82" rx="24" fill="#fff"/><circle cx="60" cy="98" r="9" fill="#1d1d1f"/><rect x="56" y="100" width="8" height="20" rx="4" fill="#1d1d1f"/></svg>
+          </div>
+          <span class="tracker"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><span class="tracker"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><span class="tracker"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><span class="tracker"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><span class="tracker"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><span class="tracker"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><span class="tracker"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><span class="tracker"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span>
+          <div class="vault__badge"><b>0 bytes</b> uploaded</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. STATS -->
+    <section class="specs">
+      <h2 class="specs__title">Small app.<br />Serious protection.</h2>
+      <div class="stats">
+        <span class="stats__shine" aria-hidden="true"></span>
+        <div class="stat"><span class="stat__val" data-to="0.4" data-pre="&lt;" data-suf="s" data-dec="1">&lt;0.4s</span><span class="stat__label">to check a link before it opens</span></div>
+        <div class="stat"><span class="stat__val" data-to="0" data-from="99">0</span><span class="stat__label">ads, trackers or data sales</span></div>
+        <div class="stat"><span class="stat__val">24/7</span><span class="stat__label">real-time protection in the background</span></div>
+        <div class="stat"><span class="stat__val">Free</span><span class="stat__label">core protection for everyone</span></div>
+      </div>
+    </section>
+
+    <!-- 6. THREATS (horizontal, pinned on desktop) -->
+    <section class="threats" id="threats">
+      <div class="threats__head">
+        <h2>Know what it stops.</h2>
+        <p>The scams that hit phones every day, caught before they reach you.</p>
+      </div>
+      <div class="threats__viewport">
+        <div class="threats__track">
+          <article class="tcard t1">
+            <div class="tcard__art"></div>
+            <svg class="tcard__mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+            <div class="sc sc-phish"><div class="sc-url"><span class="sc-url__warn">!</span><span class="sc-url__text">bank-login-secure.top</span></div><span class="sc-stamp">Blocked</span></div>
+            <svg class="tcard__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+            <div class="tcard__body"><h3>Phishing links</h3><p>Fake login pages that copy your bank, email or social apps.</p></div>
+          </article>
+          <article class="tcard t2">
+            <div class="tcard__art"></div>
+            <svg class="tcard__mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.8 7L4 20l1.1-4.4A8 8 0 1 1 21 12Z"/><path d="M12 8v4m0 3h.01"/></svg>
+            <div class="sc sc-sms"><p class="sc-b sc-b1">Your account is blocked.</p><p class="sc-b sc-b2">Tap here to unlock it now</p><span class="sc-warn">Scam pattern found</span></div>
+            <svg class="tcard__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.8 7L4 20l1.1-4.4A8 8 0 1 1 21 12Z"/><path d="M12 8v4m0 3h.01"/></svg>
+            <div class="tcard__body"><h3>Fake bank SMS</h3><p>"Your account is blocked" texts that push you to act fast.</p></div>
+          </article>
+          <article class="tcard t3">
+            <div class="tcard__art"></div>
+            <svg class="tcard__mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/><path d="m17 3 4 4m0-4-4 4"/></svg>
+            <div class="sc sc-code"><div class="sc-boxes"><i style="--d:0">4</i><i style="--d:1">8</i><i style="--d:2">2</i><i style="--d:3">9</i><i style="--d:4">1</i><i style="--d:5">3</i></div><span class="sc-warn">Never share this code</span></div>
+            <svg class="tcard__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/><path d="m17 3 4 4m0-4-4 4"/></svg>
+            <div class="tcard__body"><h3>WhatsApp takeovers</h3><p>Tricks to steal your 6-digit code and lock you out.</p></div>
+          </article>
+          <article class="tcard t4">
+            <div class="tcard__art"></div>
+            <svg class="tcard__mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M10 12l4 4m0-4-4 4"/></svg>
+            <div class="sc sc-apk"><div class="sc-file"><span>APK</span><i class="sc-scanline"></i></div><span class="sc-warn">Fake app removed</span></div>
+            <svg class="tcard__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M10 12l4 4m0-4-4 4"/></svg>
+            <div class="tcard__body"><h3>Malicious APKs</h3><p>Fake apps sent as invoices, photos or "updates".</p></div>
+          </article>
+          <article class="tcard t5">
+            <div class="tcard__art"></div>
+            <svg class="tcard__mark" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M8 15.5h.01M12 15.5h.01M16 15.5h.01"/></svg>
+            <div class="sc sc-call"><div class="sc-caller"><span class="sc-ring"></span><span class="sc-ring sc-ring2"></span><span class="sc-avatar">B</span></div><b class="sc-name">"Bank Support"</b><small class="sc-sub">Incoming call</small><span class="sc-warn">Likely scam call</span></div>
+            <svg class="tcard__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M8 15.5h.01M12 15.5h.01M16 15.5h.01"/></svg>
+            <div class="tcard__body"><h3>OTP fraud</h3><p>Callers and messages that ask for your one-time codes.</p></div>
+          </article>
+          <article class="tcard t6">
+            <div class="tcard__art"></div>
+            <svg class="tcard__mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <div class="sc sc-spy"><div class="sc-eye"><div class="sc-eye__ball"><i class="sc-eye__pupil"></i></div><span class="sc-eye__lid"></span></div><span class="sc-warn">Hidden app found</span></div>
+            <svg class="tcard__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <div class="tcard__body"><h3>Spy apps</h3><p>Hidden apps that watch your screen, messages or location.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. FAQ as a chat -->
+    <section class="faq" id="faq">
+      <h2 class="faq__title">Questions? Answers.</h2>
+      <p class="faq__sub">Straight answers, the way a friend would text you.</p>
+      <div class="chat">
+        <div class="chat__pair">
+          <p class="bq">Is Antiviotic really free?</p>
+          <div class="ba-row"><span class="ba-av" aria-hidden="true"><svg viewBox="0 0 32 32" width="16" height="16"><path d="M16 2 4 7v8c0 7.5 5.1 13.4 12 15 6.9-1.6 12-7.5 12-15V7L16 2Z" fill="none" stroke="#000" stroke-width="3"/></svg></span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span><p class="ba">Yes. Core protection is free, with no ads. We will never sell your data.</p></div>
+        </div>
+        <div class="chat__pair">
+          <p class="bq">Does it read my messages?</p>
+          <div class="ba-row"><span class="ba-av" aria-hidden="true"><svg viewBox="0 0 32 32" width="16" height="16"><path d="M16 2 4 7v8c0 7.5 5.1 13.4 12 15 6.9-1.6 12-7.5 12-15V7L16 2Z" fill="none" stroke="#000" stroke-width="3"/></svg></span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span><p class="ba">No. It only checks links and files, and the checks run on your device.</p></div>
+        </div>
+        <div class="chat__pair">
+          <p class="bq">Will it slow down my phone?</p>
+          <div class="ba-row"><span class="ba-av" aria-hidden="true"><svg viewBox="0 0 32 32" width="16" height="16"><path d="M16 2 4 7v8c0 7.5 5.1 13.4 12 15 6.9-1.6 12-7.5 12-15V7L16 2Z" fill="none" stroke="#000" stroke-width="3"/></svg></span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span><p class="ba">No. Antiviotic is built to be light. It only wakes up when something new arrives.</p></div>
+        </div>
+        <div class="chat__pair">
+          <p class="bq">When does it launch?</p>
+          <div class="ba-row"><span class="ba-av" aria-hidden="true"><svg viewBox="0 0 32 32" width="16" height="16"><path d="M16 2 4 7v8c0 7.5 5.1 13.4 12 15 6.9-1.6 12-7.5 12-15V7L16 2Z" fill="none" stroke="#000" stroke-width="3"/></svg></span><span class="typing" aria-hidden="true"><i></i><i></i><i></i></span><p class="ba">Android comes first, then iOS. Join the waitlist and you will hear from us first.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. CTA -->
+    <section class="cta" id="join">
+      <canvas id="cta-canvas" aria-hidden="true"></canvas>
+      <h2 class="cta__title">Give your phone<br /><span class="grad">an immune system.</span></h2>
+      <p class="cta__sub">Join the waitlist. Be first when Antiviotic launches.</p>
+      <form class="waitlist" novalidate>
+        <label for="email" class="sr-only">Email address</label>
+        <input id="email" name="email" type="email" placeholder="Email address" autocomplete="email" required />
+        <button type="submit" class="pill"><span class="pill__label" data-roll>Join waitlist</span><span class="pill__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></button>
+        <p class="waitlist__msg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__line" aria-hidden="true"></div>
+    <div class="footer__inner">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="#overview" class="nav__brand" aria-label="Antiviotic home"><svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true">
+          <path class="logo-shield" d="M16 2 4 7v8c0 7.5 5.1 13.4 12 15 6.9-1.6 12-7.5 12-15V7L16 2Z" fill="none" stroke="currentColor" stroke-width="2.2"/>
+          <g transform="rotate(35 16 16.5)"><rect class="logo-pill" x="11.8" y="10.5" width="8.4" height="12" rx="4.2" fill="none" stroke="url(#lg2)" stroke-width="2.2"/><path d="M11.8 16.5h8.4" stroke="url(#lg2)" stroke-width="2.2"/></g>
+          <defs><linearGradient id="lg2" x1="0" x2="1"><stop offset="0" stop-color="#4cf2b0"/><stop offset="1" stop-color="#3ab8ff"/></linearGradient></defs>
+        </svg><span>Antiviotic</span></a>
+          <p>The antibiotic for your phone. Free protection from scam links, fake apps and account takeovers.</p>
+          <span class="status"><i></i>In development · Android first</span>
+        </div>
+        <div class="footer__cols">
+          <div><h4>Product</h4><ul><li><a href="#overview">Overview</a></li><li><a href="#security">Security</a></li><li><a href="#privacy">Privacy</a></li><li><a href="#threats">Threats</a></li><li><a href="#faq">FAQ</a></li></ul></div><div><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#">Press</a></li><li><a href="#">Contact</a></li></ul></div><div><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="#">Cookie Policy</a></li></ul></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer__mark" data-text="Antiviotic" aria-hidden="true">Antiviotic</div>
+    <div class="footer__bottom">
+      <span>Copyright © 2026 Antiviotic. All rights reserved. App screens shown are design previews.</span>
+      <div class="footer__right">
+        <div class="footer__social"><a href="#" aria-label="X"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4 4 20"/></svg></a><a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10.5V16M8 7.5v.01M12 16v-5.5M12 13c0-1.6 1-2.6 2.4-2.6S16.5 11.4 16.5 13v3"/></svg></a><a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5v.01"/></svg></a></div>
+        <button class="totop" type="button">Back to top<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 19V5m0 0-6 6m6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
   </footer>
 
+  <script src="vendor/gsap.min.js"></script>
+  <script src="vendor/ScrollTrigger.min.js"></script>
+  <script src="vendor/SplitText.min.js"></script>
+  <script src="vendor/lenis.min.js"></script>
+  <script src="js/chip.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
