@@ -15,7 +15,7 @@ fix = lambda h: re.sub(r'href="#', 'href="/#', h).replace('href="/#main"', 'href
 chrome, footer = fix(chrome), fix(footer)
 
 UPDATED = "18 November 2026"
-V = "20261119a"  # bump on every release so browsers load fresh CSS/JS (also in index.html links)
+V = "20261118f"  # bump on every release so browsers load fresh CSS/JS (also in index.html links)
 PAGES = {}
 
 PAGES["privacy"] = ("Privacy Policy", "How Antiviotic handles the little data this website collects, and how the app is designed to keep your phone's data on your phone.", f"""
