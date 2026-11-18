@@ -753,3 +753,18 @@ form.is-busy button[type=submit] { opacity: 0.7; pointer-events: none; }
 }
 .waitlist--hero:has(.waitlist__msg:not(:empty)) + .hero-trust { visibility: hidden; }
 @media (max-width: 420px) { .waitlist--hero .pill { padding: 0 5px 0 16px; gap: 8px; font-size: 15px; } .waitlist--hero .pill__icon { width: 34px; height: 34px; } }
+/* Short windows (laptops with browser bars, landscape tablets): tighter hero so the chip has room below */
+@media (max-height: 780px) and (min-width: 700px) {
+  .hero-copy { top: max(9vh, 84px); }
+  .hero-title { font-size: clamp(44px, 9.5vh, 84px); margin: 16px auto 14px; }
+  .hero-sub { font-size: 17px; }
+  .waitlist--hero { margin-top: 22px; }
+  .hero-trust { margin-top: 14px; font-size: 14px; }
+}
+@media (max-height: 740px) and (max-width: 699px) {
+  .hero-copy { top: max(9vh, 78px); }
+  .hero-title { font-size: 40px; margin: 14px auto 10px; }
+  .hero-sub { font-size: 16px; }
+  .waitlist--hero { margin-top: 18px; }
+  .hero-trust { margin-top: 12px; }
+}

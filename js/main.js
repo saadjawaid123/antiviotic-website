@@ -7,7 +7,10 @@
   const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   /* ---------- WebGL scenes ---------- */
-  const chip = window.AVChip ? window.AVChip.init($("#chip-canvas"), { y: innerWidth < 700 ? -1.55 : -1.9 }) : null; // starts low so it peeks under the hero text
+  // The chip starts low enough to peek out under the hero text, however tall the window is
+  const heroRoom = () => { const c = $(".hero-copy"); return c ? (c.offsetTop + c.offsetHeight) / innerHeight : 0.7; };
+  const chipStartY = () => Math.max(-3.2, (innerWidth < 700 ? -1.55 : -1.9) - Math.max(0, heroRoom() - (innerWidth < 700 ? 0.62 : 0.69)) * 3.2);
+  const chip = window.AVChip ? window.AVChip.init($("#chip-canvas"), { y: chipStartY() }) : null;
   const shield = window.AVParticles && $("#shield-canvas") ? window.AVParticles.init($("#shield-canvas")) : null;
   // The CTA chip is only built when the visitor gets near the end of the page (saves a WebGL scene at load)
   const C = { rotX: 0.9, rotY: -0.8, scale: 0.5, y: 1.35, reveal: 0, logo: 1, glow: 0.8, introY: 0, introA: 0, intensity: 0.9 };
