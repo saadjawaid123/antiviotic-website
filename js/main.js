@@ -80,17 +80,15 @@
 
   // Created after the pinned sections so their positions include pin spacing
   function navTriggers() {
-    // Frosted once you scroll; slides away while scrolling down, comes back on any scroll up
-    let lastY = scrollY;
+    // Frosted once you scroll; always visible
     const onScroll = () => {
       const y = scrollY;
       nav.classList.toggle("is-scrolled", y > 24);
-      if (Math.abs(y - lastY) > 6) { nav.classList.toggle("is-hidden", y > lastY && y > 300 && burger.getAttribute("aria-expanded") !== "true"); lastY = y; }
     };
     addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     ScrollTrigger.create({ start: 0, end: "max", onUpdate: (s) => gsap.set(".nav__progress i", { scaleX: s.progress }) });
-    ["how", "features", "privacy", "threats", "faq"].forEach((id) => {
+    ["how", "features", "threats", "privacy", "faq"].forEach((id) => {
       const link = $(`.nav__links a[href="#${id}"]`);
       ScrollTrigger.create({
         trigger: "#" + id, start: "top center", end: "bottom center",
@@ -247,10 +245,11 @@
       .to(counter, { v: 1, duration: 1.2, onUpdate: () => nums.forEach((n) => (n.textContent = Math.round(+n.dataset.n * counter.v))) }, 11.3)
       .to({}, { duration: 0.6 }, total - 0.6);
 
-    /* 4. Privacy: headline lights up word by word; trackers keep bouncing off the vault while it is on screen */
+    /* 4. Privacy (sits after the pinned Threats section, so its triggers refresh last): headline lights up word by word; trackers keep bouncing off the vault while it is on screen */
     const pWords = SplitText.create(".privacy__title", { type: "words", wordsClass: "w" });
-    gsap.to(pWords.words, { color: "#f5f5f7", stagger: 0.1, ease: "none", scrollTrigger: { trigger: ".privacy__title", start: "top 85%", end: "bottom 50%", scrub: 0.6 } });
-    gsap.from(".privacy__copy .eyebrow, .privacy__sub, .privacy__points li", { y: 30, autoAlpha: 0, duration: 1, stagger: 0.1, ease: "expo.out", scrollTrigger: { trigger: ".privacy__copy", start: "top 80%", once: true } });
+    gsap.fromTo(".privacy", { "--px": "5vw", "--pr": "48px" }, { "--px": "0vw", "--pr": "0px", ease: "none", scrollTrigger: { refreshPriority: -1, trigger: ".privacy", start: "top bottom", end: "top 15%", scrub: 0.8 } });
+    gsap.to(pWords.words, { color: "#1d1d1f", stagger: 0.1, ease: "none", scrollTrigger: { refreshPriority: -1, trigger: ".privacy__title", start: "top 85%", end: "bottom 50%", scrub: 0.6 } });
+    gsap.from(".privacy__copy .eyebrow, .privacy__sub, .privacy__points li", { y: 30, autoAlpha: 0, duration: 1, stagger: 0.1, ease: "expo.out", scrollTrigger: { refreshPriority: -1, trigger: ".privacy__copy", start: "top 80%", once: true } });
     const vault = $(".vault"), trackers = $$(".tracker");
     const far = () => vault.offsetWidth * 0.95, near = () => vault.offsetWidth * 0.38 + 17;
     const bounce = gsap.timeline({ repeat: -1, paused: true });
@@ -261,11 +260,11 @@
         .fromTo(".vault__flash", { opacity: 0.9, scale: 0.97 }, { opacity: 0, scale: 1.06, duration: 0.5, immediateRender: false }, at + 0.8);
     });
     bounce.to({}, { duration: 0.8 });
-    gsap.timeline({ scrollTrigger: { trigger: ".vault", start: "top 80%", once: true } })
+    gsap.timeline({ scrollTrigger: { refreshPriority: -1, trigger: ".vault", start: "top 80%", once: true } })
       .fromTo(".vault", { scale: 0.7, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 1.2, ease: "expo.out" })
       .fromTo(".vlock__shackle", { y: -20 }, { y: 0, duration: 0.8, ease: "bounce.out" }, 0.6)
       .fromTo(".vault__badge", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "back.out(2)" }, 1.2);
-    ScrollTrigger.create({ trigger: ".vault", start: "top bottom", end: "bottom top", onToggle: (st) => (st.isActive ? bounce.play() : bounce.pause()) });
+    ScrollTrigger.create({ refreshPriority: -1, trigger: ".vault", start: "top bottom", end: "bottom top", onToggle: (st) => (st.isActive ? bounce.play() : bounce.pause()) });
 
     // Spy-app eye follows the cursor (wanders on touch screens)
     const pupil = $(".sc-eye__pupil"), eye = $(".sc-eye");
