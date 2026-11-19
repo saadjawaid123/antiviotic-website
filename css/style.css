@@ -811,12 +811,12 @@ form.is-busy button[type=submit] { opacity: 0.7; pointer-events: none; }
 /* ===== v11: header always visible, uppercase nav with underline, light privacy section ===== */
 .nav, .nav.is-hidden { transform: none; }
 .nav__pill { display: none; }
-.nav__links { gap: 4px; font-size: 18px; }
-.nav__links a { padding: 8px 14px; color: rgba(255, 255, 255, 0.88); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+.nav__links { gap: 4px; font-size: 14px; }
+.nav__links a { padding: 8px 14px; color: rgba(255, 255, 255, 0.88); text-transform: uppercase; letter-spacing: -0.06em; font-weight: 500; }
 .nav__links a:hover, .nav__links a.is-active { color: #fff; }
 .nav__links a::after, .nav__links a.is-active::after { content: ""; display: block; position: absolute; left: 14px; right: 14px; bottom: 2px; width: auto; height: 2px; margin: 0; border-radius: 2px; background: #fff; box-shadow: none; transform: scaleX(0); transform-origin: left; transition: transform 0.45s var(--ease); }
 .nav__links a.is-active::after { transform: scaleX(1); }
-@media (max-width: 1180px) { .nav__links { font-size: 16px; gap: 0; } .nav__links a { padding: 8px 10px; } .nav__links a::after { left: 10px; right: 10px; } }
+@media (max-width: 1180px) { .nav__links { font-size: 12px; gap: 0; } .nav__links a { padding: 8px 10px; } .nav__links a::after { left: 10px; right: 10px; } }
 
 /* Privacy on white: the panel grows from a rounded card to full width as it scrolls in */
 .privacy { position: relative; isolation: isolate; background: none; color: #1d1d1f; --px: 0vw; --pr: 0px; }

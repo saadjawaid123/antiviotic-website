@@ -88,17 +88,18 @@
     addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     ScrollTrigger.create({ start: 0, end: "max", onUpdate: (s) => gsap.set(".nav__progress i", { scaleX: s.progress }) });
-    ["how", "features", "threats", "privacy", "faq"].forEach((id) => {
-      const link = $(`.nav__links a[href="#${id}"]`);
-      ScrollTrigger.create({
-        trigger: "#" + id, start: "top center", end: "bottom center",
-        onToggle: (s) => {
-          link.classList.toggle("is-active", s.isActive);
-          if (s.isActive) currentLink = link; else if (currentLink === link) currentLink = null;
-          movePill(currentLink);
-        },
-      });
-    });
+    // Active link = the section under the middle of the screen (measured live, so pinned sections count for their whole pinned scroll)
+    const spy = ["how", "features", "threats", "privacy", "faq"].map((id) => [$("#" + id), $(`.nav__links a[href="#${id}"]`)]);
+    const setActive = () => {
+      const mid = innerHeight / 2;
+      let hit = null;
+      spy.forEach(([sec, link]) => { const r = sec.getBoundingClientRect(); if (!hit && r.top <= mid && r.bottom >= mid) hit = link; });
+      if (hit === currentLink) return;
+      navLinks.forEach((l) => l.classList.toggle("is-active", l === hit));
+      currentLink = hit;
+    };
+    ScrollTrigger.create({ start: 0, end: "max", onUpdate: setActive, onRefresh: setActive });
+    setActive();
   }
 
   // Mobile menu
